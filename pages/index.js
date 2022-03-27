@@ -1,33 +1,37 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
     const [songTitle, setSongTitle] = useState([]);
+    const router = useRouter();
 
-    const get_data = () => {
-        axios.get('api/get').then((data) => {
+    useEffect(() => {
+        axios.get('api/getAll').then((data) => {
             console.log(data.data[0].song_title);
             setSongTitle(data.data);
         });
-    };
-
-    const add_data = () => {
-        axios.get('api/add').then((data) => {
-            console.log(data.data);
-        });
-    };
+    }, []);
 
     return (
         <>
             <>welcome to parolier-V2</>
             <br />
-            <button onClick={get_data}>Get data</button>
-            <button onClick={add_data}>Add data</button>
-            {/* {songTitle.song_title} */}
-            {/* {songTitle ? <>{songTitle}</> : <></>} */}
+            <button onClick={() => router.push('/addSong')}>Add data</button>
             <ol>
                 {songTitle.map((eachSong) => (
-                    <li key={eachSong.song_title}>{eachSong.song_title}</li>
+                    <li key={eachSong.id}>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                router.push({
+                                    pathname: '/song',
+                                    query: { id: eachSong.id },
+                                });
+                            }}>
+                            {eachSong.song_title} - {eachSong.song_buffer}
+                        </button>
+                    </li>
                 ))}
             </ol>
         </>
