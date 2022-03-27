@@ -1,32 +1,12 @@
-// import axios from 'axios';
-// import React, { useState, useEffect } from 'react';
-// import { useRouter } from 'next/router';
-
-// export default function Settings() {
-
-//     return (
-//         <>
-//             <>welcome to parolier-V2</>
-//         </>
-//     );
-// }
-// import { Brightness4 as DarkIcon, Brightness7 as LightIcon } from '@mui/icons-material';
-// import { useDarkMode } from 'next-dark-mode';
 import Router from 'next/router';
-// import Head from 'next/head';
 import NextLink from 'next/link';
 import { Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
-// import GoogleIcon from '@mui/icons-material/Google';
-// import AppleIcon from '@mui/icons-material/Apple';
-// import SvgIcon from '@mui/material/SvgIcon';
-// import { mdiMusicNoteEighth, mdiRadioFm, mdiSpotify } from '@mdi/js';
 import React, { useState } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Cookies from 'universal-cookie';
-// import { getClient } from '../utils/ApiClient';
 
 const Login = () => {
     let errorBool = false;
@@ -62,24 +42,6 @@ const Login = () => {
         setUserEmail(event.target.value);
     };
 
-    // const svgSpotify = (
-    //     <SvgIcon>
-    //         <path d={mdiSpotify} />
-    //     </SvgIcon>
-    // );
-
-    // const svgLastFM = (
-    //     <SvgIcon>
-    //         <path d={mdiRadioFm} />
-    //     </SvgIcon>
-    // );
-
-    // const svgTmpDeezer = (
-    //     <SvgIcon>
-    //         <path d={mdiMusicNoteEighth} />
-    //     </SvgIcon>
-    // );
-
     const submit = () => {
         if (userPassword === '') {
             errorBool = true;
@@ -94,18 +56,7 @@ const Login = () => {
         console.log(errorBool);
 
         if (errorBool === false) {
-            getClient()
-                .authentication.login({
-                    email: userEmail,
-                    password: userPassword,
-                })
-                .then((data) => {
-                    console.log(data);
-                    cookies.set('API_TOKEN', data.token, { path: '/' });
-                    Router.push('/');
-                })
-                // Todo: Handle 401: Token expired
-                .catch(handleOpenErrorModal);
+            // todo : send data to server
         }
     };
 
@@ -141,7 +92,6 @@ const Login = () => {
                             fullWidth
                             error={errorEmptyFieldPassword !== ''}
                             helperText={errorEmptyFieldPassword}
-                            // onBlur={test}
                             label="Password"
                             margin="normal"
                             name="password"
@@ -153,11 +103,9 @@ const Login = () => {
                             <Button
                                 color="primary"
                                 style={{ borderRadius: '5px' }}
-                                // disabled={}
                                 fullWidth
                                 size="large"
                                 onClick={submit}
-                                // type="submit"
                                 variant="contained">
                                 Sign In Now
                             </Button>

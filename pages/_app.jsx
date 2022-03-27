@@ -1,11 +1,9 @@
-import { CssBaseline } from '@material-ui/core';
-import Navbar from './navbar';
+import NavBar from './navbar';
 
 function MyApp({ Component, pageProps }) {
     return (
         <>
-            <CssBaseline />
-            <Navbar />
+            <NavBar />
             <Component {...pageProps} />
         </>
     );

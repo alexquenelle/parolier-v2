@@ -8,7 +8,8 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
-import MusicNote from '@material-ui/icons/MusicNote';
+import MusicNote from '@mui/icons-material/MusicNote';
+import NavBar from './navbar';
 
 export default function Home() {
     const [songTitle, setSongTitle] = useState([]);
@@ -23,24 +24,10 @@ export default function Home() {
 
     return (
         <>
-            <>welcome to parolier-V2</>
-            <br />
             <button onClick={() => router.push('/addSong')}>Add data</button>
-            {/* <ol> */}
             {songTitle.map((eachSong) => (
-                // <li key={eachSong.id}>
-                //     <button
-                //         type="button"
-                //         onClick={() => {
-                //             router.push({
-                //                 pathname: '/song',
-                //                 query: { id: eachSong.id },
-                //             });
-                //         }}>
-                //         {eachSong.song_title} - {eachSong.song_buffer}
-                //     </button>
-                // </li>
                 <List
+                    Key={eachSong.id}
                     onClick={() => {
                         router.push({
                             pathname: '/song',
@@ -58,17 +45,6 @@ export default function Home() {
                     </ListItem>
                 </List>
             ))}
-            {/* </ol> */}
-            {/* <List style={{ border: '1px solid black', borderRadius: '5px', margin: '10px', padding: '-10px' }}>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            <MusicNote />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Single-line item" />
-                </ListItem>
-            </List> */}
         </>
     );
 }
