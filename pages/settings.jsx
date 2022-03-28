@@ -15,6 +15,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import MusicNote from '@mui/icons-material/MusicNote';
+import IconsDropdown from './iconsDropdown';
 
 const Login = () => {
     let errorBool = false;
@@ -85,11 +86,17 @@ const Login = () => {
         }
     }
 
+    const deleteSong = (songId) => {
+        axios.get(`/api/deleteSongById`, { params: { id: songId } }).then((data) => {
+            console.log(data.data);
+        });
+        setSongs((songs) => songs.filter((song) => song.id !== songId));
+    };
+
     return (
         <>
             {isConnected ? (
                 <>
-                    <>just doing test</>
                     <Button
                         color="primary"
                         style={{ borderRadius: '5px', marginTop: '10px' }}
@@ -102,26 +109,29 @@ const Login = () => {
                     {songs.map((eachSong) => (
                         <List
                             Key={eachSong.id}
-                            onClick={() => {
-                                router.push({
-                                    pathname: '/song',
-                                    query: { id: eachSong.id },
-                                });
-                            }}
                             style={{
                                 border: '1px solid black',
                                 borderRadius: '5px',
                                 margin: '10px',
                                 padding: '-10px',
                             }}>
-                            <ListItem>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <MusicNote />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText primary={eachSong.song_title + ' - ' + eachSong.song_buffer} />
-                            </ListItem>
+                            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                                <ListItem
+                                    onClick={() => {
+                                        router.push({
+                                            pathname: '/song',
+                                            query: { id: eachSong.id },
+                                        });
+                                    }}>
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <MusicNote />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary={eachSong.song_title + ' - ' + eachSong.song_buffer} />
+                                </ListItem>
+                                <IconsDropdown songId={eachSong.id} deleteSong={deleteSong} />
+                            </Box>
                         </List>
                     ))}
                 </>
@@ -204,3 +214,27 @@ const Login = () => {
 };
 
 export default Login;
+
+// import * as React from 'react';
+// import Box from '@mui/material/Box';
+// import Avatar from '@mui/material/Avatar';
+// import Menu from '@mui/material/Menu';
+// import MenuItem from '@mui/material/MenuItem';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import Divider from '@mui/material/Divider';
+// import IconButton from '@mui/material/IconButton';
+// import Typography from '@mui/material/Typography';
+// import Tooltip from '@mui/material/Tooltip';
+// import PersonAdd from '@mui/icons-material/PersonAdd';
+// import Settings from '@mui/icons-material/Settings';
+// import Logout from '@mui/icons-material/Logout';
+
+// export default function Login() {
+//     return (
+//         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+//             <IconsDropdown />
+//             <>test</>
+//             <Typography sx={{ minWidth: 100 }}>Profile</Typography>
+//         </Box>
+//     );
+// }
