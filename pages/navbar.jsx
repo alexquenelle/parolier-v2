@@ -10,13 +10,14 @@ import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
 import Settings from '@mui/icons-material/Settings';
 import Home from '@mui/icons-material/Home';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/router';
+import Cookies from 'universal-cookie';
+import LoginIcon from '@mui/icons-material/Login';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -62,13 +63,10 @@ export default function PrimarySearchAppBar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const router = useRouter();
+    const cookies = new Cookies();
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-    const handleProfileMenuOpen = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
@@ -99,8 +97,45 @@ export default function PrimarySearchAppBar() {
             }}
             open={isMenuOpen}
             onClose={handleMenuClose}>
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            <MenuItem onClick={() => router.push('/')}>
+                <IconButton size="large" color="inherit">
+                    <Badge color="error">
+                        <Home />
+                    </Badge>
+                </IconButton>
+                <p>Home</p>
+            </MenuItem>
+            <MenuItem onClick={() => router.push('/settings')}>
+                <IconButton size="large" color="inherit">
+                    <Badge color="error">
+                        <Settings />
+                    </Badge>
+                </IconButton>
+                <p>Settings</p>
+            </MenuItem>
+            {cookies.get('adminConnected') ? (
+                <MenuItem
+                    onClick={() => {
+                        cookies.remove('adminConnected');
+                        router.push('/');
+                    }}>
+                    <IconButton size="large" color="inherit">
+                        <Badge color="error">
+                            <LogoutIcon />
+                        </Badge>
+                    </IconButton>
+                    <p>Logout</p>
+                </MenuItem>
+            ) : (
+                <MenuItem onClick={() => router.push('/settings')}>
+                    <IconButton size="large" color="inherit">
+                        <Badge color="error">
+                            <LoginIcon />
+                        </Badge>
+                    </IconButton>
+                    <p>Login</p>
+                </MenuItem>
+            )}
         </Menu>
     );
 
@@ -136,6 +171,29 @@ export default function PrimarySearchAppBar() {
                 </IconButton>
                 <p>Settings</p>
             </MenuItem>
+            {cookies.get('adminConnected') ? (
+                <MenuItem
+                    onClick={() => {
+                        cookies.remove('adminConnected');
+                        router.push('/');
+                    }}>
+                    <IconButton size="large" color="inherit">
+                        <Badge color="error">
+                            <LogoutIcon />
+                        </Badge>
+                    </IconButton>
+                    <p>Logout</p>
+                </MenuItem>
+            ) : (
+                <MenuItem onClick={() => router.push('/settings')}>
+                    <IconButton size="large" color="inherit">
+                        <Badge color="error">
+                            <LoginIcon />
+                        </Badge>
+                    </IconButton>
+                    <p>Login</p>
+                </MenuItem>
+            )}
         </Menu>
     );
 
@@ -153,19 +211,15 @@ export default function PrimarySearchAppBar() {
                         <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    </Box>
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit">
-                            <MoreIcon />
-                        </IconButton>
-                    </Box>
+                    <IconButton
+                        size="large"
+                        aria-label="show more"
+                        aria-controls={mobileMenuId}
+                        aria-haspopup="true"
+                        onClick={handleMobileMenuOpen}
+                        color="inherit">
+                        <MoreIcon />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             {renderMobileMenu}
