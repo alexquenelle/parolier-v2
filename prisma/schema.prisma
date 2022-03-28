@@ -16,8 +16,8 @@ model Song {
   song_buffer String
 }
 
-// model Admin {
-//   id       String @id @default(cuid())
-//   userName String
-//   password String
-// }
+model Admin {
+  id       String @id @default(cuid())
+  userName String
+  password String
+}

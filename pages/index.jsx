@@ -1,15 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import MusicNote from '@mui/icons-material/MusicNote';
-import NavBar from './navbar';
 
 export default function Home() {
     const [songTitle, setSongTitle] = useState([]);
@@ -24,7 +21,6 @@ export default function Home() {
 
     return (
         <>
-            <button onClick={() => router.push('/addSong')}>Add data</button>
             {songTitle.map((eachSong) => (
                 <List
                     Key={eachSong.id}
