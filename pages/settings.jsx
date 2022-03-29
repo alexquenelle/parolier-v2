@@ -1,6 +1,5 @@
 import Router from 'next/router';
-import NextLink from 'next/link';
-import { Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
+import { Button, Container, TextField, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
@@ -16,8 +15,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import MusicNote from '@mui/icons-material/MusicNote';
 import IconsDropdown from './iconsDropdown';
+import Checkbox from '@mui/material/Checkbox';
 
-const Login = () => {
+const Login = (props) => {
     let errorBool = false;
     const [userEmail, setUserEmail] = useState('');
     const [userPassword, setUserPassword] = useState('');
@@ -35,6 +35,7 @@ const Login = () => {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 400,
+        bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
         p: 4,
@@ -81,10 +82,25 @@ const Login = () => {
                     cookies.set('adminConnected', adminsData.data[0].userName, { path: '/' });
                     console.log('success');
                     setUserConnected(true);
+                } else {
+                    handleOpenErrorModal();
                 }
             }
         }
     }
+
+    const setDisplayedSongs = (id, boolIsDisplayable) => {
+        console.log(id);
+        console.log(boolIsDisplayable);
+        axios({
+            method: 'put',
+            url: 'api/updateDisplayableSongs',
+            data: {
+                id: id,
+                boolIsDisplayable: boolIsDisplayable,
+            },
+        });
+    };
 
     const deleteSong = (songId) => {
         axios.get(`/api/deleteSongById`, { params: { id: songId } }).then((data) => {
@@ -93,20 +109,23 @@ const Login = () => {
         setSongs((songs) => songs.filter((song) => song.id !== songId));
     };
 
-    return (
-        <>
-            {isConnected ? (
-                <>
-                    <Button
-                        color="primary"
-                        style={{ borderRadius: '5px', marginTop: '10px' }}
-                        fullWidth={true}
-                        size="large"
-                        onClick={() => Router.push('/addSong')}
-                        variant="contained">
-                        Add a new song
-                    </Button>
-                    {songs.map((eachSong) => (
+    if (isConnected) {
+        return (
+            <>
+                <Button
+                    color="primary"
+                    style={{ borderRadius: '5px', marginTop: '10px' }}
+                    fullWidth={true}
+                    size="large"
+                    onClick={() => Router.push('/addSong')}
+                    variant="contained">
+                    Add a new song
+                </Button>
+                {songs
+                    .filter((eachSong) => {
+                        return eachSong.song_title.toLowerCase().includes(props.searchParams.toLowerCase());
+                    })
+                    .map((eachSong) => (
                         <List
                             Key={eachSong.id}
                             style={{
@@ -131,11 +150,30 @@ const Login = () => {
                                     <ListItemText primary={eachSong.song_title + ' - ' + eachSong.song_buffer} />
                                 </ListItem>
                                 <IconsDropdown songId={eachSong.id} deleteSong={deleteSong} />
+                                {eachSong.display ? (
+                                    <Checkbox
+                                        defaultChecked
+                                        onChange={(e) => {
+                                            setDisplayedSongs(eachSong.id, e.target.checked);
+                                            console.log(e.target.checked);
+                                        }}
+                                    />
+                                ) : (
+                                    <Checkbox
+                                        onChange={(e) => {
+                                            setDisplayedSongs(eachSong.id, e.target.checked);
+                                            console.log(e.target.checked);
+                                        }}
+                                    />
+                                )}
                             </Box>
                         </List>
                     ))}
-                </>
-            ) : (
+            </>
+        );
+    } else {
+        return (
+            <>
                 <Box
                     component="main"
                     sx={{
@@ -187,30 +225,30 @@ const Login = () => {
                         </form>
                     </Container>
                 </Box>
-            )}
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={open}
-                onClose={handleCloseErrorModal}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}>
-                <Fade in={open}>
-                    <Box sx={style}>
-                        <Typography id="transition-modal-title" variant="h6" component="h2">
-                            An error has occurred.
-                        </Typography>
-                        <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                            Please try again.
-                        </Typography>
-                    </Box>
-                </Fade>
-            </Modal>
-        </>
-    );
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={handleCloseErrorModal}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}>
+                    <Fade in={open}>
+                        <Box sx={style}>
+                            <Typography id="transition-modal-title" variant="h6" component="h2">
+                                An error has occurred.
+                            </Typography>
+                            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                                Wrong user name of password, please try again.
+                            </Typography>
+                        </Box>
+                    </Fade>
+                </Modal>
+            </>
+        );
+    }
 };
 
 export default Login;
