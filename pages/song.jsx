@@ -19,11 +19,11 @@ export default function Song() {
 
     return (
         <>
-            <Typography color="textPrimary" variant="h3">
+            <Typography color="textPrimary" variant="h4">
                 {songData.song_title}
             </Typography>
             <Divider variant="middle" />
-            <Typography color="textPrimary" variant="h6">
+            <Typography style={{ whiteSpace: 'pre-line' }} color="textPrimary" variant="h5">
                 {songData.song_buffer}
             </Typography>
         </>

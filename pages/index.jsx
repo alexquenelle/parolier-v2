@@ -63,7 +63,7 @@ export default function Home(props) {
                                         <MusicNote />
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText primary={eachSong.song_title + ' - ' + eachSong.song_buffer} />
+                                <ListItemText primary={eachSong.song_title} />
                             </ListItem>
                         </List>
                     ))}
