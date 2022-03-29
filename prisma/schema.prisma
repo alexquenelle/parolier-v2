@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Song {
-  id          String @id @default(cuid())
+  id          String  @id @default(cuid())
   song_title  String
   song_buffer String
+  display     Boolean @default(true)
 }
 
 model Admin {

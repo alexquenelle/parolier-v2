@@ -1,14 +1,17 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
 
 export default function Song() {
     const router = useRouter();
     const [songData, setSongData] = useState([]);
+    const idToFecth = router.query.id;
 
     useEffect(() => {
         console.log(router.query.id);
-        axios.get(`/api/getOneById`, { params: { id: router.query.id } }).then((data) => {
+        axios.get(`/api/getOneById`, { params: { id: idToFecth } }).then((data) => {
             console.log(data.data);
             setSongData(data.data);
         });
@@ -16,9 +19,13 @@ export default function Song() {
 
     return (
         <>
-            <button onClick={() => router.back()}>go back</button>
-            <h1>{songData.song_title}</h1>
-            <p>{songData.song_buffer}</p>
+            <Typography color="textPrimary" variant="h3">
+                {songData.song_title}
+            </Typography>
+            <Divider variant="middle" />
+            <Typography color="textPrimary" variant="h6">
+                {songData.song_buffer}
+            </Typography>
         </>
     );
 }

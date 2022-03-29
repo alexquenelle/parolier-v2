@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsIcon from '@mui/icons-material/Settings';
-import axios from 'axios';
 
 export default function IconsDropdown(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -43,7 +42,6 @@ export default function IconsDropdown(props) {
                     Delete
                 </MenuItem>
                 <MenuItem onClick={handleClose}>Modify</MenuItem>
-                {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
             </Menu>
         </div>
     );
