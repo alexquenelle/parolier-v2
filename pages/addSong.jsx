@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Box from '@mui/material/Box';
 import { Button, Container, TextField, Typography } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export default function Home() {
     const router = useRouter();
@@ -10,6 +11,7 @@ export default function Home() {
     let songBuffer = undefined;
     const errorString = 'This input field cannot be empty.';
     const [errorEmptyField, setErrorEmptyField] = useState('');
+    const [songAddedSuccessfully, setSongAddedSuccessfully] = useState(false);
 
     const add_data = () => {
         console.log(songBuffer);
@@ -23,6 +25,10 @@ export default function Home() {
                     song_title: songTitle,
                     song_buffer: songBuffer,
                 },
+            }).then((response) => {
+                if (response.status === 200) {
+                    setSongAddedSuccessfully(true);
+                }
             });
         }
     };
@@ -72,16 +78,31 @@ export default function Home() {
                             }}
                             variant="outlined"
                         />
-                        <Box sx={{ py: 2 }}>
-                            <Button
-                                color="primary"
-                                style={{ borderRadius: '5px' }}
-                                fullWidth
-                                size="large"
-                                onClick={add_data}
-                                variant="contained">
-                                Add
-                            </Button>
+                        <Box sx={{ py: 2, display: 'flex', alignItems: 'center'}}>
+                            {songAddedSuccessfully ? (
+                                <>
+                                    <CheckCircleIcon fontSize="large" />
+                                    <Button
+                                        color="primary"
+                                        style={{ borderRadius: '5px' }}
+                                        fullWidth
+                                        size="large"
+                                        onClick={() => setSongAddedSuccessfully(false)}
+                                        variant="contained">
+                                        Add an other song
+                                    </Button>
+                                </>
+                            ) : (
+                                <Button
+                                    color="primary"
+                                    style={{ borderRadius: '5px' }}
+                                    fullWidth
+                                    size="large"
+                                    onClick={add_data}
+                                    variant="contained">
+                                    Add
+                                </Button>
+                            )}
                         </Box>
                     </form>
                 </Container>

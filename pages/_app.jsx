@@ -16,9 +16,15 @@ function MyApp({ Component, pageProps }) {
 
     return (
         <>
-            <NavBar funcSearch={handleSearch} />
+            <NavBar funcSearch={handleSearch} stringSearch={searchParams} />
             <Component {...pageProps} searchParams={searchParams} />
-            <Button onClick={() => router.back()} variant="contained" startIcon={<ArrowBackIosIcon />}>
+            <Button
+                onClick={() => {
+                    setsearchParams('');
+                    router.back();
+                }}
+                variant="contained"
+                startIcon={<ArrowBackIosIcon />}>
                 Go Back
             </Button>
         </>

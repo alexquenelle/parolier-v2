@@ -16,6 +16,10 @@ import Avatar from '@mui/material/Avatar';
 import MusicNote from '@mui/icons-material/MusicNote';
 import IconsDropdown from './iconsDropdown';
 import Checkbox from '@mui/material/Checkbox';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import { experimentalStyled as styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 
 const Login = (props) => {
     let errorBool = false;
@@ -27,6 +31,7 @@ const Login = (props) => {
     const cookies = new Cookies();
     const [isConnected, setUserConnected] = useState(cookies.get('adminConnected'));
     const [songs, setSongs] = useState([]);
+    const [songTag, setSongTag] = useState([]);
     const router = useRouter();
 
     const style = {
@@ -44,6 +49,32 @@ const Login = (props) => {
     useEffect(() => {
         axios.get('api/getAll').then((data) => {
             setSongs(data.data);
+            setSongTag([
+                {
+                    value: 'value1',
+                    variant: 'outlined',
+                },
+                {
+                    value: 'value2',
+                    variant: 'outlined',
+                },
+                {
+                    value: 'value3',
+                    variant: 'outlined',
+                },
+                {
+                    value: 'value4',
+                    variant: 'outlined',
+                },
+                {
+                    value: 'value5',
+                    variant: 'outlined',
+                },
+                {
+                    value: 'value6',
+                    variant: 'outlined',
+                },
+            ]);
         });
     }, []);
 
@@ -60,6 +91,14 @@ const Login = (props) => {
         setErrorEmptyFieldEmail('');
         setUserEmail(event.target.value);
     };
+
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    }));
 
     async function submit() {
         if (userPassword === '') {
@@ -121,6 +160,33 @@ const Login = (props) => {
                     variant="contained">
                     Add a new song
                 </Button>
+                <Divider variant="middle" style={{ margin: '20px', backgroundColor: 'black' }} />
+                <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                    {songTag.map((song) => (
+                        <Grid item xs={2} sm={4} md={4} key={song.value}>
+                            <Button
+                                onClick={() => {
+                                    if (song.variant === 'outlined') {
+                                        setSongTag((songTag) =>
+                                            songTag.map((tag) =>
+                                                tag.value === song.value ? { ...tag, variant: 'contained' } : tag,
+                                            ),
+                                        );
+                                    } else {
+                                        setSongTag((songTag) =>
+                                            songTag.map((tag) =>
+                                                tag.value === song.value ? { ...tag, variant: 'outlined' } : tag,
+                                            ),
+                                        );
+                                    }
+                                }}
+                                fullWidth
+                                variant={song.variant}>
+                                {song.value}
+                            </Button>
+                        </Grid>
+                    ))}
+                </Grid>
                 {songs
                     .filter((eachSong) => {
                         return eachSong.song_title.toLowerCase().includes(props.searchParams.toLowerCase());
@@ -147,7 +213,7 @@ const Login = (props) => {
                                             <MusicNote />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary={eachSong.song_title + ' - ' + eachSong.song_buffer} />
+                                    <ListItemText primary={eachSong.song_title} />
                                 </ListItem>
                                 <IconsDropdown songId={eachSong.id} deleteSong={deleteSong} />
                                 {eachSong.display ? (
