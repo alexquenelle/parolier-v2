@@ -12,6 +12,8 @@ export default function Home() {
     const errorString = 'This input field cannot be empty.';
     const [errorEmptyField, setErrorEmptyField] = useState('');
     const [songAddedSuccessfully, setSongAddedSuccessfully] = useState(false);
+    const textInput_lyrics = React.useRef(null);
+    const textInput_title = React.useRef(null);
 
     const add_data = () => {
         console.log(songBuffer);
@@ -27,6 +29,8 @@ export default function Home() {
                 },
             }).then((response) => {
                 if (response.status === 200) {
+                    textInput_lyrics.current.value = '';
+                    textInput_title.current.value = '';
                     setSongAddedSuccessfully(true);
                 }
             });
@@ -50,11 +54,18 @@ export default function Home() {
                                 Add a new song !
                             </Typography>
                         </Box>
+                        {/* <Button
+                            onClick={() => {
+                                textInput.current.value = 'testtt';
+                            }}>
+                            ici
+                        </Button> */}
                         <TextField
                             fullWidth
                             error={errorEmptyField !== ''}
                             helperText={errorEmptyField}
                             label="Title"
+                            inputRef={textInput_title}
                             margin="normal"
                             maxRows={Infinity}
                             multiline
@@ -69,6 +80,7 @@ export default function Home() {
                             error={errorEmptyField !== ''}
                             helperText={errorEmptyField}
                             label="Lyrics"
+                            inputRef={textInput_lyrics}
                             margin="normal"
                             multiline
                             maxRows={Infinity}
@@ -78,7 +90,7 @@ export default function Home() {
                             }}
                             variant="outlined"
                         />
-                        <Box sx={{ py: 2, display: 'flex', alignItems: 'center'}}>
+                        <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
                             {songAddedSuccessfully ? (
                                 <>
                                     <CheckCircleIcon fontSize="large" />

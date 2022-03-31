@@ -17,6 +17,15 @@ export default function Home(props) {
     useEffect(() => {
         axios.get('api/getAllDisplayableSongs').then((data) => {
             console.log(data.data);
+            data.data.sort(function (a, b) {
+                if (a.song_title < b.song_title) {
+                    return -1;
+                }
+                if (a.song_title > b.song_title) {
+                    return 1;
+                }
+                return 0;
+            });
             setSongTitle(data.data);
         });
     }, []);

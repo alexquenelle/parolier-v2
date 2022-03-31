@@ -48,6 +48,15 @@ const Login = (props) => {
 
     useEffect(() => {
         axios.get('api/getAll').then((data) => {
+            data.data.sort(function (a, b) {
+                if (a.song_title < b.song_title) {
+                    return -1;
+                }
+                if (a.song_title > b.song_title) {
+                    return 1;
+                }
+                return 0;
+            });
             setSongs(data.data);
             setSongTag([
                 {

@@ -63,7 +63,6 @@ export default function PrimarySearchAppBar(props) {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const router = useRouter();
     const cookies = new Cookies();
-    console.log('here => ', props);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -204,7 +203,6 @@ export default function PrimarySearchAppBar(props) {
                     <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
                         Parolier
                     </Typography>
-                    {props.stringSearch}
                     <Search
                         onChange={(e) => {
                             props.funcSearch(e.target.value);
