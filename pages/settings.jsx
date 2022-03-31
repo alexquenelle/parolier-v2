@@ -49,10 +49,10 @@ const Login = (props) => {
     useEffect(() => {
         axios.get('api/getAll').then((data) => {
             data.data.sort(function (a, b) {
-                if (a.song_title < b.song_title) {
+                if (a.song_title.toLowerCase() < b.song_title.toLowerCase()) {
                     return -1;
                 }
-                if (a.song_title > b.song_title) {
+                if (a.song_title.toLowerCase() > b.song_title.toLowerCase()) {
                     return 1;
                 }
                 return 0;
