@@ -17,6 +17,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 import LoginIcon from '@mui/icons-material/Login';
+import { Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -63,6 +65,7 @@ export default function PrimarySearchAppBar(props) {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const router = useRouter();
     const cookies = new Cookies();
+    const textInput_search = React.useRef(null);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -211,10 +214,21 @@ export default function PrimarySearchAppBar(props) {
                             <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
+                            inputRef={textInput_search}
                             defaultValue={''}
                             placeholder="Search…"
                             inputProps={{ 'aria-label': 'search' }}
                         />
+                        <CloseIcon
+                            style={{
+                                position: 'absolute',
+                                right: '7px',
+                                top: '7px',
+                                cursor: 'pointer',
+                            }}
+                            onClick={() => {
+                                textInput_search.current.value = '';
+                            }}></CloseIcon>
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <IconButton
