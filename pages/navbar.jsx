@@ -203,7 +203,13 @@ export default function PrimarySearchAppBar(props) {
         <Box sx={{ flexGrow: 1, marginBottom: '80px' }}>
             <AppBar position="fixed">
                 <Toolbar>
-                    <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
+                    <Typography
+                        variant="h6"
+                        onClick={() => router.push('/')}
+                        style={{ cursor: 'pointer' }}
+                        noWrap
+                        component="div"
+                        sx={{ display: { xs: 'none', sm: 'block' } }}>
                         Parolier
                     </Typography>
                     <Search
