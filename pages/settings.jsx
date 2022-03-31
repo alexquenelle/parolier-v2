@@ -169,6 +169,15 @@ const Login = (props) => {
                     variant="contained">
                     Add a new song
                 </Button>
+                <Button
+                    color="primary"
+                    style={{ borderRadius: '5px', marginTop: '10px' }}
+                    fullWidth={true}
+                    size="large"
+                    onClick={() => Router.push('/addTags')}
+                    variant="contained">
+                    Add a new tag
+                </Button>
                 <Divider variant="middle" style={{ margin: '20px', backgroundColor: 'black' }} />
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {songTag.map((song) => (

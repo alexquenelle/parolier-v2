@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Box from '@mui/material/Box';
 import { Button, Container, TextField, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export default function Home() {
     const router = useRouter();
-    let songTitle = undefined;
-    let songBuffer = undefined;
+    let tagName = undefined;
     const errorString = 'This input field cannot be empty.';
     const [errorEmptyField, setErrorEmptyField] = useState('');
     const [songAddedSuccessfully, setSongAddedSuccessfully] = useState(false);
@@ -23,23 +25,27 @@ export default function Home() {
         });
     }, []);
 
+    const Item = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    }));
+
     const add_data = () => {
-        console.log(songBuffer);
-        if (songTitle === undefined || songTitle === '' || songBuffer === undefined || songBuffer === '') {
+        console.log(tagName);
+        if (tagName === undefined || tagName === '') {
             setErrorEmptyField(errorString);
         } else {
             axios({
                 method: 'post',
-                url: 'api/add',
+                url: 'api/addTags',
                 data: {
-                    song_title: songTitle,
-                    song_buffer: songBuffer,
-                    tags: 'testtag',
+                    tag: tagName,
                 },
             }).then((response) => {
                 if (response.status === 200) {
-                    textInput_lyrics.current.value = '';
-                    textInput_title.current.value = '';
                     setSongAddedSuccessfully(true);
                 }
             });
@@ -60,15 +66,9 @@ export default function Home() {
                     <form>
                         <Box sx={{ my: 3 }}>
                             <Typography color="textPrimary" variant="h4">
-                                Add a new song !
+                                Add a new Tag !
                             </Typography>
                         </Box>
-                        {/* <Button
-                            onClick={() => {
-                                textInput.current.value = 'testtt';
-                            }}>
-                            ici
-                        </Button> */}
                         <TextField
                             fullWidth
                             error={errorEmptyField !== ''}
@@ -79,29 +79,14 @@ export default function Home() {
                             maxRows={Infinity}
                             multiline
                             onChange={() => {
-                                songTitle = event.target.value;
-                                setErrorEmptyField('');
-                            }}
-                            variant="outlined"
-                        />
-                        <TextField
-                            fullWidth
-                            error={errorEmptyField !== ''}
-                            helperText={errorEmptyField}
-                            label="Lyrics"
-                            inputRef={textInput_lyrics}
-                            margin="normal"
-                            multiline
-                            maxRows={Infinity}
-                            onChange={() => {
-                                songBuffer = event.target.value;
+                                tagName = event.target.value;
                                 setErrorEmptyField('');
                             }}
                             variant="outlined"
                         />
                         <Box sx={{ my: 3 }}>
                             <Typography color="textPrimary" variant="h4">
-                                Tags
+                                List of tags
                             </Typography>
                         </Box>
                         <Box sx={{ my: 3 }}>
@@ -112,7 +97,8 @@ export default function Home() {
                                         key={tag.id}
                                         onClick={() => {
                                             console.log(tag.id);
-                                        }}>
+                                        }}
+                                        disabled>
                                         {tag.tag_name}
                                     </Button>
                                 );
@@ -122,25 +108,13 @@ export default function Home() {
                             {songAddedSuccessfully ? (
                                 <>
                                     <CheckCircleIcon fontSize="large" />
-                                    <Button
-                                        color="primary"
-                                        style={{ borderRadius: '5px' }}
-                                        fullWidth
-                                        size="large"
-                                        onClick={() => setSongAddedSuccessfully(false)}
-                                        variant="contained">
-                                        Add an other song
+                                    <Button onClick={add_data} fullWidth variant="contained">
+                                        Add Tag Another
                                     </Button>
                                 </>
                             ) : (
-                                <Button
-                                    color="primary"
-                                    style={{ borderRadius: '5px' }}
-                                    fullWidth
-                                    size="large"
-                                    onClick={add_data}
-                                    variant="contained">
-                                    Add
+                                <Button onClick={add_data} fullWidth variant="contained">
+                                    Add Tag
                                 </Button>
                             )}
                         </Box>

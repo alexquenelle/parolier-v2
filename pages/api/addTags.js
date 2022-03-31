@@ -4,11 +4,9 @@ const prisma = new PrismaClient();
 
 async function handler(req, res) {
     console.log(req.body);
-    const newSong = await prisma.song.create({
+    const newSong = await prisma.tags.create({
         data: {
-            song_title: req.body.song_title,
-            song_buffer: req.body.song_buffer,
-            tags: req.body.tags,
+            tag_name: req.body.tag,
         },
     });
     console.log(newSong);
