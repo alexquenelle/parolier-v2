@@ -133,6 +133,8 @@ const Login = (props) => {
                 } else {
                     handleOpenErrorModal();
                 }
+            } else {
+                console.log('error');
             }
         }
     }
