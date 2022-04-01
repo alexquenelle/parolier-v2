@@ -287,7 +287,13 @@ const Login = (props) => {
                                 )}
                             </Box>
                             {eachSong.tags.map((eachTag) => (
-                                <Chip label={eachTag} color="primary" variant="outlined" style={{ margin: '5px' }} />
+                                <Chip
+                                    key={eachTag}
+                                    label={eachTag}
+                                    color="primary"
+                                    variant="outlined"
+                                    style={{ margin: '5px' }}
+                                />
                             ))}
                         </List>
                     ))}
