@@ -15,7 +15,7 @@ model Song {
   song_title  String
   song_buffer String
   display     Boolean @default(true)
-  tags        String
+  tags        String[]
 }
 
 model Admin {

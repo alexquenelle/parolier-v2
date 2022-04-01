@@ -8,8 +8,8 @@ import Cookies from 'universal-cookie';
 
 export default function Home() {
     const router = useRouter();
-    let songTitle = undefined;
-    let songBuffer = undefined;
+    const [songTitle, setSongTitle] = useState('');
+    const [songBuffer, setSongBuffer] = useState('');
     const errorString = 'This input field cannot be empty.';
     const [errorEmptyField, setErrorEmptyField] = useState('');
     const [songAddedSuccessfully, setSongAddedSuccessfully] = useState(false);
@@ -17,6 +17,7 @@ export default function Home() {
     const textInput_lyrics = React.useRef(null);
     const textInput_title = React.useRef(null);
     const cookies = new Cookies();
+    const [tagSelected, setTagSelected] = useState([]);
 
     useEffect(() => {
         axios.get('api/getAllTags').then((data) => {
@@ -26,7 +27,7 @@ export default function Home() {
     }, []);
 
     const add_data = () => {
-        console.log(songBuffer);
+        console.log(songTitle + ' ' + songBuffer);
         if (songTitle === undefined || songTitle === '' || songBuffer === undefined || songBuffer === '') {
             setErrorEmptyField(errorString);
         } else {
@@ -36,7 +37,7 @@ export default function Home() {
                 data: {
                     song_title: songTitle,
                     song_buffer: songBuffer,
-                    tags: 'testtag',
+                    tags: tagSelected,
                 },
             }).then((response) => {
                 if (response.status === 200) {
@@ -86,7 +87,8 @@ export default function Home() {
                                 maxRows={Infinity}
                                 multiline
                                 onChange={() => {
-                                    songTitle = event.target.value;
+                                    // songTitle = event.target.value;
+                                    setSongTitle(event.target.value);
                                     setErrorEmptyField('');
                                 }}
                                 variant="outlined"
@@ -100,8 +102,9 @@ export default function Home() {
                                 margin="normal"
                                 multiline
                                 maxRows={Infinity}
-                                onChange={() => {
-                                    songBuffer = event.target.value;
+                                onChange={(event) => {
+                                    // songBuffer = event.target.value;
+                                    setSongBuffer(event.target.value);
                                     setErrorEmptyField('');
                                 }}
                                 variant="outlined"
@@ -115,10 +118,19 @@ export default function Home() {
                                 {tags.map((tag) => {
                                     return (
                                         <Button
-                                            variant="outlined"
+                                            variant={tagSelected.includes(tag.tag_name) ? 'contained' : 'outlined'}
                                             key={tag.id}
                                             onClick={() => {
-                                                console.log(tag.id);
+                                                console.log(tagSelected);
+                                                if (tagSelected.includes(tag.tag_name)) {
+                                                    setTagSelected(
+                                                        tagSelected.filter(
+                                                            (tagSelected) => tagSelected !== tag.tag_name,
+                                                        ),
+                                                    );
+                                                } else {
+                                                    setTagSelected([...tagSelected, tag.tag_name]);
+                                                }
                                             }}>
                                             {tag.tag_name}
                                         </Button>

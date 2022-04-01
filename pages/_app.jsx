@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps }) {
                     setsearchParams('');
                     router.back();
                 }}
+                style={{ position: 'fixed', bottom: '10px', left: '10px' }}
                 variant="contained"
                 startIcon={<ArrowBackIosIcon />}>
                 Go Back

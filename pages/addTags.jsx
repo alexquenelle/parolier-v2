@@ -3,9 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Box from '@mui/material/Box';
 import { Button, Container, TextField, Typography } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -22,7 +19,7 @@ export default function Home() {
     const [songAddedSuccessfully, setSongAddedSuccessfully] = useState(false);
     const [modifyTags, setModifyTags] = useState(false);
     const [tags, setTags] = useState([]);
-    const textInput_title = React.useRef(null);
+    const textInput_tag = React.useRef(null);
     const cookies = new Cookies();
 
     useEffect(() => {
@@ -31,14 +28,6 @@ export default function Home() {
             setTags(data.data);
         });
     }, []);
-
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
 
     const add_data = () => {
         console.log(tagName);
@@ -67,8 +56,9 @@ export default function Home() {
                 style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
                 variant="contained"
                 color="primary"
-                onClick={() => router.push('/settings')}
-            >You first need to login</Button>
+                onClick={() => router.push('/settings')}>
+                You first need to login
+            </Button>
         );
     } else {
         return (
@@ -93,7 +83,7 @@ export default function Home() {
                                 error={errorEmptyField !== ''}
                                 helperText={errorEmptyField}
                                 label="Title"
-                                inputRef={textInput_title}
+                                inputRef={textInput_tag}
                                 margin="normal"
                                 maxRows={Infinity}
                                 multiline
@@ -103,13 +93,18 @@ export default function Home() {
                                 }}
                                 variant="outlined"
                             />
-
                             <Box sx={{ py: 2, display: 'flex', alignItems: 'center' }}>
                                 {songAddedSuccessfully ? (
                                     <>
                                         <CheckCircleIcon fontSize="large" />
-                                        <Button onClick={add_data} fullWidth variant="contained">
-                                            Add Tag Another
+                                        <Button
+                                            onClick={() => {
+                                                textInput_tag.current.value = '';
+                                                setSongAddedSuccessfully(false);
+                                            }}
+                                            fullWidth
+                                            variant="contained">
+                                            Add Another Tag
                                         </Button>
                                     </>
                                 ) : (

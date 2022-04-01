@@ -20,6 +20,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import Chip from '@mui/material/Chip';
 
 const Login = (props) => {
     let errorBool = false;
@@ -30,8 +31,9 @@ const Login = (props) => {
     const errorString = 'This input field cannot be empty.';
     const cookies = new Cookies();
     const [isConnected, setUserConnected] = useState(cookies.get('adminConnected'));
+    const [isAllCheckBoxesChecked, setIsAllCheckBoxesChecked] = useState(false);
     const [songs, setSongs] = useState([]);
-    const [songTag, setSongTag] = useState([]);
+    const [songTags, setSongTag] = useState([]);
     const router = useRouter();
 
     const style = {
@@ -57,33 +59,37 @@ const Login = (props) => {
                 }
                 return 0;
             });
+            let display = true;
+            for (let i = 0; i < data.data.length; i++) {
+                if (data.data[i].display === false) {
+                    display = false;
+                }
+            }
+            setIsAllCheckBoxesChecked(display);
+
             setSongs(data.data);
-            setSongTag([
-                {
-                    value: 'value1',
-                    variant: 'outlined',
-                },
-                {
-                    value: 'value2',
-                    variant: 'outlined',
-                },
-                {
-                    value: 'value3',
-                    variant: 'outlined',
-                },
-                {
-                    value: 'value4',
-                    variant: 'outlined',
-                },
-                {
-                    value: 'value5',
-                    variant: 'outlined',
-                },
-                {
-                    value: 'value6',
-                    variant: 'outlined',
-                },
-            ]);
+            axios.get('api/getAllTags').then((data) => {
+                // let allTagsInSongs = [];
+                // songs.forEach((song) => {
+                //     console.log(song);
+                //     song.tags.forEach((tag) => {
+                //         if (song.display === true) {
+                //             allTagsInSongs.push(tag);
+                //         }
+                //     });
+                // });
+                // console.log(allTagsInSongs);
+
+                let arrayVariant = data.data.map((v) => Object.assign(v, { variant: 'outlined' }));
+
+                // arrayVariant.forEach((tag) => {
+                //     if (allTagsInSongs.includes(tag.tag_name)) {
+                //         tag.variant = 'contained';
+                //     }
+                // });
+
+                setSongTag(arrayVariant);
+            });
         });
     }, []);
 
@@ -100,14 +106,6 @@ const Login = (props) => {
         setErrorEmptyFieldEmail('');
         setUserEmail(event.target.value);
     };
-
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
 
     async function submit() {
         if (userPassword === '') {
@@ -140,8 +138,6 @@ const Login = (props) => {
     }
 
     const setDisplayedSongs = (id, boolIsDisplayable) => {
-        console.log(id);
-        console.log(boolIsDisplayable);
         axios({
             method: 'put',
             url: 'api/updateDisplayableSongs',
@@ -182,31 +178,58 @@ const Login = (props) => {
                 </Button>
                 <Divider variant="middle" style={{ margin: '20px', backgroundColor: 'black' }} />
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                    {songTag.map((song) => (
-                        <Grid item xs={2} sm={4} md={4} key={song.value}>
+                    {songTags.map((eachTag) => (
+                        <Grid item xs={2} sm={4} md={4} key={eachTag.id}>
                             <Button
                                 onClick={() => {
-                                    if (song.variant === 'outlined') {
+                                    if (eachTag.variant === 'outlined') {
                                         setSongTag((songTag) =>
                                             songTag.map((tag) =>
-                                                tag.value === song.value ? { ...tag, variant: 'contained' } : tag,
+                                                tag.tag_name === eachTag.tag_name
+                                                    ? { ...tag, variant: 'contained' }
+                                                    : tag,
                                             ),
                                         );
                                     } else {
                                         setSongTag((songTag) =>
                                             songTag.map((tag) =>
-                                                tag.value === song.value ? { ...tag, variant: 'outlined' } : tag,
+                                                tag.tag_name === eachTag.tag_name
+                                                    ? { ...tag, variant: 'outlined' }
+                                                    : tag,
                                             ),
                                         );
                                     }
                                 }}
                                 fullWidth
-                                variant={song.variant}>
-                                {song.value}
+                                variant={eachTag.variant}>
+                                {eachTag.tag_name}
                             </Button>
                         </Grid>
                     ))}
                 </Grid>
+                <Divider variant="middle" style={{ margin: '20px', backgroundColor: 'black' }} />
+                <Button
+                    onClick={() => {
+                        if (isAllCheckBoxesChecked === false) {
+                            songs.forEach((song) => {
+                                setDisplayedSongs(song.id, true);
+                            });
+                            setIsAllCheckBoxesChecked(true);
+                        } else {
+                            setIsAllCheckBoxesChecked(false);
+                            songs.forEach((song) => {
+                                setDisplayedSongs(song.id, false);
+                            });
+                        }
+                    }}
+                    color="primary"
+                    style={{ borderRadius: '5px', marginTop: '10px' }}
+                    fullWidth={true}
+                    size="large"
+                    variant={isAllCheckBoxesChecked ? 'contained' : 'outlined'}>
+                    Check All
+                </Button>
+                <Divider variant="middle" style={{ margin: '20px', backgroundColor: 'black' }} />
                 {songs
                     .filter((eachSong) => {
                         return eachSong.song_title.toLowerCase().includes(props.searchParams.toLowerCase());
@@ -235,6 +258,7 @@ const Login = (props) => {
                                     </ListItemAvatar>
                                     <ListItemText primary={eachSong.song_title} />
                                 </ListItem>
+
                                 <IconsDropdown songId={eachSong.id} deleteSong={deleteSong} />
                                 {eachSong.display ? (
                                     <Checkbox
@@ -249,10 +273,22 @@ const Login = (props) => {
                                         onChange={(e) => {
                                             setDisplayedSongs(eachSong.id, e.target.checked);
                                             console.log(e.target.checked);
+                                            songTags.map((eachTag) => {
+                                                setSongTag((songTag) =>
+                                                    songTag.map((tag) =>
+                                                        tag.tag_name === eachTag.tag_name
+                                                            ? { ...tag, variant: 'outlined' }
+                                                            : tag,
+                                                    ),
+                                                );
+                                            });
                                         }}
                                     />
                                 )}
                             </Box>
+                            {eachSong.tags.map((eachTag) => (
+                                <Chip label={eachTag} color="primary" variant="outlined" style={{ margin: '5px' }} />
+                            ))}
                         </List>
                     ))}
             </>

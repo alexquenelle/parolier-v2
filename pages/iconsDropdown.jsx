@@ -14,8 +14,6 @@ export default function IconsDropdown(props) {
         setAnchorEl(null);
     };
 
-    console.log(props);
-
     return (
         <div>
             <Button
