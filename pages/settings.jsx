@@ -146,6 +146,23 @@ const Login = (props) => {
                 boolIsDisplayable: boolIsDisplayable,
             },
         });
+        setSongs(
+            songs.map((song) => {
+                if (song.id === id) {
+                    song.display = boolIsDisplayable;
+                }
+                return song;
+            }),
+        );
+
+        // check if all checkboxes are checked
+        let display = true;
+        for (let i = 0; i < songs.length; i++) {
+            if (songs[i].display === false) {
+                display = false;
+            }
+        }
+        setIsAllCheckBoxesChecked(display);
     };
 
     const deleteSong = (songId) => {
@@ -227,7 +244,7 @@ const Login = (props) => {
                     fullWidth={true}
                     size="large"
                     variant={isAllCheckBoxesChecked ? 'contained' : 'outlined'}>
-                    Check All
+                    {isAllCheckBoxesChecked ? 'Uncheck all' : 'Check all'}
                 </Button>
                 <Divider variant="middle" style={{ margin: '20px', backgroundColor: 'black' }} />
                 {songs
@@ -260,31 +277,40 @@ const Login = (props) => {
                                 </ListItem>
 
                                 <IconsDropdown songId={eachSong.id} deleteSong={deleteSong} />
-                                {eachSong.display ? (
+                                {/* {eachSong.display ? (
                                     <Checkbox
-                                        defaultChecked
+                                        checked={eachSong.display}
                                         onChange={(e) => {
                                             setDisplayedSongs(eachSong.id, e.target.checked);
                                             console.log(e.target.checked);
                                         }}
                                     />
-                                ) : (
-                                    <Checkbox
-                                        onChange={(e) => {
-                                            setDisplayedSongs(eachSong.id, e.target.checked);
-                                            console.log(e.target.checked);
-                                            songTags.map((eachTag) => {
-                                                setSongTag((songTag) =>
-                                                    songTag.map((tag) =>
-                                                        tag.tag_name === eachTag.tag_name
-                                                            ? { ...tag, variant: 'outlined' }
-                                                            : tag,
-                                                    ),
-                                                );
-                                            });
-                                        }}
-                                    />
-                                )}
+                                ) : ( */}
+                                <Checkbox
+                                    checked={eachSong.display}
+                                    onChange={(e) => {
+                                        if (e.target.checked === false) {
+                                            setIsAllCheckBoxesChecked(false);
+                                        }
+                                        setDisplayedSongs(eachSong.id, e.target.checked);
+                                        console.log(e.target.checked);
+                                        // if (eachSong.display) {
+                                        //     console.log('inside');
+                                        //     setDisplayedSongs(eachSong.id, e.target.checked);
+                                        // } else {
+                                        songTags.map((eachTag) => {
+                                            setSongTag((songTag) =>
+                                                songTag.map((tag) =>
+                                                    tag.tag_name === eachTag.tag_name
+                                                        ? { ...tag, variant: 'outlined' }
+                                                        : tag,
+                                                ),
+                                            );
+                                        });
+                                        // }
+                                    }}
+                                />
+                                {/* )} */}
                             </Box>
                             {eachSong.tags.map((eachTag) => (
                                 <Chip
