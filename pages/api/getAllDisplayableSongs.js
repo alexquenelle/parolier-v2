@@ -8,7 +8,6 @@ async function handler(req, res) {
             display: true,
         },
     });
-    console.log(songsDisplayable);
     res.status(200).json(songsDisplayable);
 }
 

@@ -21,13 +21,11 @@ export default function Home() {
 
     useEffect(() => {
         axios.get('api/getAllTags').then((data) => {
-            console.log(data.data);
             setTags(data.data);
         });
     }, []);
 
     const add_data = () => {
-        console.log(songTitle + ' ' + songBuffer);
         if (songTitle === undefined || songTitle === '' || songBuffer === undefined || songBuffer === '') {
             setErrorEmptyField(errorString);
         } else {
@@ -121,7 +119,6 @@ export default function Home() {
                                             variant={tagSelected.includes(tag.tag_name) ? 'contained' : 'outlined'}
                                             key={tag.id}
                                             onClick={() => {
-                                                console.log(tagSelected);
                                                 if (tagSelected.includes(tag.tag_name)) {
                                                     setTagSelected(
                                                         tagSelected.filter(

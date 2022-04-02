@@ -10,9 +10,7 @@ export default function Song() {
     const idToFecth = router.query.id;
 
     useEffect(() => {
-        console.log(router.query.id);
         axios.get(`/api/getOneById`, { params: { id: idToFecth } }).then((data) => {
-            console.log(data.data);
             setSongData(data.data);
         });
     }, []);

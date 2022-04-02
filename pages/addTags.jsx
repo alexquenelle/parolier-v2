@@ -24,13 +24,11 @@ export default function Home() {
 
     useEffect(() => {
         axios.get('api/getAllTags').then((data) => {
-            console.log(data.data);
             setTags(data.data);
         });
     }, []);
 
     const add_data = () => {
-        console.log(tagName);
         if (tagName === undefined || tagName === '') {
             setErrorEmptyField(errorString);
         } else {
@@ -41,7 +39,6 @@ export default function Home() {
                     tag: tagName,
                 },
             }).then((response) => {
-                console.log(response.data);
                 if (response.status === 200) {
                     setSongAddedSuccessfully(true);
                     setTags((tags) => [...tags, response.data]);
@@ -165,11 +162,10 @@ export default function Home() {
                                                     <CancelIcon
                                                         style={{ marginRight: '10px', cursor: 'pointer' }}
                                                         onClick={() => {
-                                                            axios
-                                                                .get(`/api/deleteTagsById`, { params: { id: tag.id } })
-                                                                .then((data) => {
-                                                                    console.log(data.data);
-                                                                });
+                                                            axios.get(`/api/deleteTagsById`, {
+                                                                params: { id: tag.id },
+                                                            });
+
                                                             setTags((tags) =>
                                                                 tags.filter((eachTag) => eachTag.id !== tag.id),
                                                             );

@@ -8,7 +8,6 @@ async function handler(req, res) {
             id: req.query.id,
         },
     });
-    console.log(deleteTag);
     res.status(200).json(deleteTag);
 }
 

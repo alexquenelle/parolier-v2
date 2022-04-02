@@ -6,11 +6,9 @@ import { Button } from '@mui/material';
 
 function MyApp({ Component, pageProps }) {
     const router = useRouter();
-    console.log(pageProps);
     const [searchParams, setsearchParams] = useState('');
 
     const handleSearch = (newSearch) => {
-        console.log(newSearch);
         setsearchParams(newSearch);
     };
 

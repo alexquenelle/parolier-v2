@@ -118,8 +118,6 @@ const Login = (props) => {
             setErrorEmptyFieldEmail(errorString);
         } else setErrorEmptyFieldEmail('');
 
-        console.log(errorBool);
-
         const adminsData = await axios.get('api/getAllAdmins').then();
 
         if (errorBool === false) {
@@ -155,7 +153,6 @@ const Login = (props) => {
             }),
         );
 
-        // check if all checkboxes are checked
         let display = true;
         for (let i = 0; i < songs.length; i++) {
             if (songs[i].display === false) {
@@ -166,9 +163,7 @@ const Login = (props) => {
     };
 
     const deleteSong = (songId) => {
-        axios.get(`/api/deleteSongById`, { params: { id: songId } }).then((data) => {
-            console.log(data.data);
-        });
+        axios.get(`/api/deleteSongById`, { params: { id: songId } });
         setSongs((songs) => songs.filter((song) => song.id !== songId));
     };
 
@@ -277,15 +272,6 @@ const Login = (props) => {
                                 </ListItem>
 
                                 <IconsDropdown songId={eachSong.id} deleteSong={deleteSong} />
-                                {/* {eachSong.display ? (
-                                    <Checkbox
-                                        checked={eachSong.display}
-                                        onChange={(e) => {
-                                            setDisplayedSongs(eachSong.id, e.target.checked);
-                                            console.log(e.target.checked);
-                                        }}
-                                    />
-                                ) : ( */}
                                 <Checkbox
                                     checked={eachSong.display}
                                     onChange={(e) => {
@@ -293,11 +279,6 @@ const Login = (props) => {
                                             setIsAllCheckBoxesChecked(false);
                                         }
                                         setDisplayedSongs(eachSong.id, e.target.checked);
-                                        console.log(e.target.checked);
-                                        // if (eachSong.display) {
-                                        //     console.log('inside');
-                                        //     setDisplayedSongs(eachSong.id, e.target.checked);
-                                        // } else {
                                         songTags.map((eachTag) => {
                                             setSongTag((songTag) =>
                                                 songTag.map((tag) =>
@@ -307,10 +288,8 @@ const Login = (props) => {
                                                 ),
                                             );
                                         });
-                                        // }
                                     }}
                                 />
-                                {/* )} */}
                             </Box>
                             {eachSong.tags.map((eachTag) => (
                                 <Chip

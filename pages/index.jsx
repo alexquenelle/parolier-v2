@@ -16,7 +16,6 @@ export default function Home(props) {
 
     useEffect(() => {
         axios.get('api/getAllDisplayableSongs').then((data) => {
-            console.log(data.data);
             data.data.sort(function (a, b) {
                 if (a.song_title.toLowerCase() < b.song_title.toLowerCase()) {
                     return -1;

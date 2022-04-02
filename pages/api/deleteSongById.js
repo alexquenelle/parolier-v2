@@ -8,7 +8,6 @@ async function handler(req, res) {
             id: req.query.id,
         },
     });
-    console.log(deletedSong);
     res.status(200).json(deletedSong);
 }
 

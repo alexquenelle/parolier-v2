@@ -3,10 +3,12 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useRouter } from 'next/router';
 
 export default function IconsDropdown(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+    const router = useRouter();
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -39,7 +41,16 @@ export default function IconsDropdown(props) {
                     }}>
                     Delete
                 </MenuItem>
-                <MenuItem onClick={handleClose}>Modify</MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        handleClose;
+                        router.push({
+                            pathname: '/modify',
+                            query: { id: props.songId },
+                        });
+                    }}>
+                    Modify
+                </MenuItem>
             </Menu>
         </div>
     );
